@@ -1,0 +1,48 @@
+@charset "UTF-8";
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+main h1 {
+    text-align: center;
+    color: black;
+}
+main ul {
+    list-style: none;
+}
+#novas_tarefas {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    background-color: white;
+}
+#novas_tarefas li{
+    border-bottom: 1px solid rgba(128, 128, 128, 0.604);
+    font-size: 20px;
+    position: relative;
+}
+#novas_tarefas li:hover {
+    background-color: rgba(128, 128, 128, 0.145);
+}
+#novas_tarefas input {
+    position: absolute;
+    left: 0px;
+    top: 0.4em;
+}
+#container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+.marcador-container {
+    background: #5bf946;
+    border: 1px solid #36ae26;
+}
+.marcador {
+    background: #fe9d9d;
+    border: 1px solid #f94646;
+    height: 90px;
+}
+

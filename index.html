@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <title>App Tarefas</title>
+
+    <style>
+        .container {
+            margin: auto;
+            width: 50%;
+            min-width: 300px;
+            box-shadow: 0px 0px 10px rgba(38, 37, 37, 0.405);
+            padding-bottom: 5px;
+        }
+        .borda{
+            border: 1px solid blue;
+        }
+        .fonte {
+            font-size: 13px;
+        }
+        .display-4 {
+            font-size: 2.5em;
+            font-family: 'Times New Roman', Times, serif;
+            width: 100%;
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <h1 class="display-4 mb-3 ">TO DO</h1>
+ 
+        <div id="alert" style="text-align: center;">
+            
+        </div>
+
+        <div id="novas_tarefas">
+
+        </div>
+
+        <div class="row align-items-center  bg-white">
+            
+            <div class="col-xl-6 col-lg-12 col-md-12 ">
+                <input type="text" name="" id="tarefa" class="form-control ">
+            </div>
+
+            <div class="col-xl-3 col-lg-6 col-md-12 pt-1 pb-1 ">
+                <input onclick="adicionarTarefa()" type="submit" value="ADICIONAR" class="btn btn-primary form-control">
+            </div>
+            
+            
+            
+            <div class="col-xl-3 col-lg-6 col-md-12  pt-1 pb-1">
+                <input onclick="removerTarefa()" type="submit" value="REMOVER" class="btn btn-primary form-control">
+            </div>  
+            
+        </div>
+    
+    </main>
+</body>
+    <script src="tarefas.js"></script>
+</html>
+            
