@@ -1,13 +1,26 @@
 function Tarefa(id, value) {
-    this.checked = false;
-    this.id = id;
     this.value = value;
+    this.id = id;
+    let checkedValue = false;
+
+    Object.defineProperty(this, 'checked', {
+            configurable: false,
+            get: function() {
+                return checkedValue;
+            },
+            set: function(check) {
+                checkedValue = check;
+            }
+        }
+    )
 }
 
-let tarefas = Array();
-var alerta = document.getElementById('alert')
-let listaTarefa = document.createElement("ul");
-let id = 0;
+function Lista(idElementos) {
+    this.tarefas = Array();
+    this.alerta = document.getElementById('alert')
+    this.listaTarefa = document.createElement("ul");
+    this.id = 0;
+}
 
 function marcarTarefa() {
     let marcados = document.getElementsByName('item')
@@ -26,45 +39,41 @@ function marcarTarefa() {
 function adicionarTarefa() {
     let a = document.getElementById('tarefa').value;
     if( a === '') {
-        alerta.classList.add('alert', 'alert-danger')
-        alerta.innerHTML = 'Insira algo válido' 
+        lista.alerta.classList.add('alert', 'alert-danger')
+        lista.alerta.innerHTML = 'Insira algo válido' 
     } else {
-        alerta.innerHTML = ''
-        alerta.classList.remove('alert', 'alert-danger')
-        let tarefa = new Tarefa(id, a);
+        lista.alerta.innerHTML = ''
+        lista.alerta.classList.remove('alert', 'alert-danger')
 
-        tarefas.unshift(tarefa);
+        let tarefa = new Tarefa(lista.id, a);
+
+        lista.tarefas.unshift(tarefa);
         a = document.getElementById('tarefa').value = ''
-        id++;
-        console.log(tarefa.value ,tarefa.id, tarefa.checked);
-        gerarElemento1();
+        lista.id++;
+        gerarElemento();
     }
 }
 
 function gerarElemento() {
     let itemTarefa = document.createElement("li");
     let inputTarefa = document.createElement("input");
-    let txtTarefa = document.createTextNode(tarefas[0].value);
+    let txtTarefa = document.createTextNode(lista.tarefas[0].value);
     [inputTarefa.type, inputTarefa.name, inputTarefa.className, itemTarefa.className] = ["checkbox", "item", "itens", "lista"];
 
-    [inputTarefa.id, inputTarefa.value] = [tarefas[0].id, tarefas[0].id];
+    [inputTarefa.id, inputTarefa.value] = [lista.tarefas[0].id, lista.tarefas[0].id];
 
     inputTarefa.addEventListener("click", marcarTarefa)
     itemTarefa.append(txtTarefa, inputTarefa);
-    listaTarefa.appendChild(itemTarefa);
-    document.getElementById('novas_tarefas').appendChild(listaTarefa);
+    lista.listaTarefa.appendChild(itemTarefa);
+    document.getElementById('novas_tarefas').appendChild(lista.listaTarefa);
     marcarTarefa();
 }
 
 function removerTarefa() {
-
-    if(tarefas == '') {
-        alerta.classList.add('alert', 'alert-danger')
-        alerta.innerHTML = 'Nenhuma tarefa adicionada'
+    if(lista.tarefas == '') {
+        lista.alerta.classList.add('alert', 'alert-danger')
+        lista.alerta.innerHTML = 'Nenhuma tarefa adicionada'
     } else {
-        alerta.innerHTML = ''
-        alerta.classList.remove('alert', 'alert-danger')
-
         //obter os input checkbox
         let marcados = document.getElementsByName('item');
         let auxiliaMarcados = Array();
@@ -73,45 +82,43 @@ function removerTarefa() {
         let countDelete = 0;
         
         //checar quais checkbox estão marcadas
-        for ( let l = 0; l < marcados.length; l++) {
-            if(marcados[l].checked) {
+        for ( let j in marcados) {
+            if(marcados[j].checked) {
                 confirmaDelete = true;
                 countDelete++;
-                for(let i in tarefas) {
-                    if (tarefas[i].id == marcados[l].id) {
-                        tarefas[i].checked = true;
-                        auxiliaMarcados.push(marcados[l]);
+                for(let i in lista.tarefas) {
+                    if (lista.tarefas[i].id == marcados[j].id) {
+                        lista.tarefas[i].checked = true;
+                        auxiliaMarcados.push(marcados[j]);
                     }
                 }
             }
         }
 
         //remover as tarefas 
-        tarefas = tarefas.filter(obj => obj.checked == false);
+        lista.tarefas = lista.tarefas.filter(obj => obj.checked == false);
 
         //remover os elementos html da página
         for(let i in auxiliaMarcados) {
             let inputParent = auxiliaMarcados[i].parentNode;
-            listaTarefa.removeChild(inputParent);
+            lista.listaTarefa.removeChild(inputParent);
         }
         
         if(!(confirmaDelete)) {
-            alerta.classList.add('alert', 'alert-danger')
-            alerta.innerHTML = 'Nenhuma tarefa selecionada'
+            lista.alerta.classList.add('alert', 'alert-danger')
+            lista.alerta.innerHTML = 'Nenhuma tarefa selecionada'
         } else {
-            alerta.innerHTML = ''
-            alerta.classList.remove('alert', 'alert-danger')
-
-            alerta.classList.add('alert', 'alert-success')
+            lista.alerta.innerHTML = ''
+            lista.alerta.classList.remove('alert', 'alert-danger')
+            lista.alerta.classList.add('alert', 'alert-success')
             if(countDelete > 1) {
-                alerta.innerHTML = 'Tarefas removidas com sucesso!'
+                lista.alerta.innerHTML = 'Tarefas removidas com sucesso!'
             } else {
-                alerta.innerHTML = 'Tarefa removida com sucesso!'
+                lista.alerta.innerHTML = 'Tarefa removida com sucesso!'
             }
-            
         }
     }
     marcarTarefa()
 }
 
-//MARCANDO TAREFAS
+const lista = new Lista();
