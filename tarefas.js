@@ -1,9 +1,19 @@
-let tarefas = Array()
+function Tarefa(id, value) {
+    this.checked = false;
+    this.id = id;
+    this.value = value;
+}
+
+let tarefas = Array();
 var alerta = document.getElementById('alert')
+let listaTarefa = document.createElement("ul");
+let id = 0;
 
 function marcarTarefa() {
     let marcados = document.getElementsByName('item')
-    let marcar = document.getElementsByName('lista')
+    
+    let marcar = document.getElementsByClassName('lista')
+    
     for ( let l = 0; l < marcados.length; l++) {
         if(marcados[l].checked) {
             marcar[l].style.textDecoration = 'line-through'  
@@ -13,34 +23,37 @@ function marcarTarefa() {
     }
 }
 
-
 function adicionarTarefa() {
-
-    let a = document.getElementById('tarefa').value
-    
+    let a = document.getElementById('tarefa').value;
     if( a === '') {
         alerta.classList.add('alert', 'alert-danger')
         alerta.innerHTML = 'Insira algo válido' 
     } else {
         alerta.innerHTML = ''
         alerta.classList.remove('alert', 'alert-danger')
+        let tarefa = new Tarefa(id, a);
 
-        tarefas.unshift(a)
-        let len = tarefas.length
-        text = '<ul>'
-        
-        for(let i = 0; i < len; i++) {
-            x = `<input type="checkbox" name="item" id=${i} value = ${i} class = "itens" onclick="marcarTarefa()">`
-            text+= `<li name="lista" value=${i}>` + x + tarefas[i]  + '</li>' 
-        }
-        
-        text += '</ul>'
-        document.getElementById('novas_tarefas').innerHTML = text 
+        tarefas.unshift(tarefa);
         a = document.getElementById('tarefa').value = ''
-        
+        id++;
+        console.log(tarefa.value ,tarefa.id, tarefa.checked);
+        gerarElemento1();
     }
+}
 
-    marcarTarefa()
+function gerarElemento() {
+    let itemTarefa = document.createElement("li");
+    let inputTarefa = document.createElement("input");
+    let txtTarefa = document.createTextNode(tarefas[0].value);
+    [inputTarefa.type, inputTarefa.name, inputTarefa.className, itemTarefa.className] = ["checkbox", "item", "itens", "lista"];
+
+    [inputTarefa.id, inputTarefa.value] = [tarefas[0].id, tarefas[0].id];
+
+    inputTarefa.addEventListener("click", marcarTarefa)
+    itemTarefa.append(txtTarefa, inputTarefa);
+    listaTarefa.appendChild(itemTarefa);
+    document.getElementById('novas_tarefas').appendChild(listaTarefa);
+    marcarTarefa();
 }
 
 function removerTarefa() {
@@ -53,72 +66,51 @@ function removerTarefa() {
         alerta.classList.remove('alert', 'alert-danger')
 
         //obter os input checkbox
-        let marcados = document.getElementsByName('item')
-        let len = tarefas.length
-
-        //criar arrays dos itens que vão ser removidos e mantidos
-        let array_remover = []
-        let array_manter = []
+        let marcados = document.getElementsByName('item');
+        let auxiliaMarcados = Array();
+        
+        let confirmaDelete = false;
+        let countDelete = 0;
         
         //checar quais checkbox estão marcadas
         for ( let l = 0; l < marcados.length; l++) {
-            //recuperando o valor das que tão checadas
             if(marcados[l].checked) {
-                v = marcados[l].value = tarefas[l]
-                
-                //adicionar os itens checados ao array de remoção
-                array_remover.unshift(v)
-                array_remover[l]
-            
-            //recuperando o valor das que não estão checadas
-            } else {
-                k = marcados[l].value = tarefas[l]
-
-                array_manter.unshift(k)
-                array_manter[l]
+                confirmaDelete = true;
+                countDelete++;
+                for(let i in tarefas) {
+                    if (tarefas[i].id == marcados[l].id) {
+                        tarefas[i].checked = true;
+                        auxiliaMarcados.push(marcados[l]);
+                    }
+                }
             }
-            
+        }
+
+        //remover as tarefas 
+        tarefas = tarefas.filter(obj => obj.checked == false);
+
+        //remover os elementos html da página
+        for(let i in auxiliaMarcados) {
+            let inputParent = auxiliaMarcados[i].parentNode;
+            listaTarefa.removeChild(inputParent);
         }
         
-        if(array_remover == '') {
+        if(!(confirmaDelete)) {
             alerta.classList.add('alert', 'alert-danger')
             alerta.innerHTML = 'Nenhuma tarefa selecionada'
         } else {
             alerta.innerHTML = ''
             alerta.classList.remove('alert', 'alert-danger')
 
-            function remover(elemento) {
-                tarefas.splice(elemento)
-            }
-            array_remover.forEach(remover)
-
-            function manter(elemento2) {
-                tarefas.unshift(elemento2)
-            }
-            array_manter.forEach(manter)
-            
-            len = tarefas.length
-            text = '<ul>'
-            for(let i = 0; i < len; i++) {
-                y = `<input type="checkbox" name="item" id=${i} value = ${i} class = "itens" onclick="marcarTarefa()">`
-                text+= `<li name="lista" value=${i}>` + y + tarefas[i]  + '</li>'
-                
-            }
-            text += '</ul>'
-            document.getElementById('novas_tarefas').innerHTML = text
-
             alerta.classList.add('alert', 'alert-success')
-            if(array_remover.length > 1) {
+            if(countDelete > 1) {
                 alerta.innerHTML = 'Tarefas removidas com sucesso!'
             } else {
                 alerta.innerHTML = 'Tarefa removida com sucesso!'
             }
             
         }
-        
-        
     }
-        
     marcarTarefa()
 }
 
